@@ -30,8 +30,8 @@ class MainViewModel @Inject constructor(var apiClient: ApiClient) : ViewModel() 
 
     private suspend fun callNewsListApi() = withContext(Dispatchers.Default) {
         val result = apiClient.newsList.await()
-        if(result.isSuccessful)
-            onSuccess(result.body()?.results)
+        if(result!=null && result.status == "ok")
+            onSuccess(result.results)
         else
             onError()
     }
