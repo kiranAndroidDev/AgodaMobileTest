@@ -4,11 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
+import news.agoda.com.sample.R
 import news.agoda.com.sample.databinding.ListItemBinding
 import news.agoda.com.sample.model.NewsEntity
 
 
-class NewsListAdapter(context: Context) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+class NewsListAdapter(var context: Context) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private var listener: ItemClick<NewsEntity>? = null
     var newsList: List<NewsEntity>? = null
@@ -39,9 +42,13 @@ class NewsListAdapter(context: Context) : RecyclerView.Adapter<NewsListAdapter.V
                 if (entity.mediaEntityList!!.isNotEmpty()) {
                     val mediaEntity = entity.mediaEntityList[0]
                     val thumbnailURL = mediaEntity.url
+                    Picasso.with(context).load(thumbnailURL).placeholder(R.drawable.place_holder)
+                            .into(viewHolder.binding.newsItemImage)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Picasso.with(context).load(R.drawable.place_holder).error(R.drawable.place_holder).placeholder(R.drawable.place_holder)
+                        .into(viewHolder.binding.newsItemImage)
             }
 
 

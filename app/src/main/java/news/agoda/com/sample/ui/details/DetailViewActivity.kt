@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 
 import news.agoda.com.sample.R
 import news.agoda.com.sample.base.BaseActivity
@@ -15,6 +17,7 @@ import java.lang.Exception
  * News detail view
  */
 class DetailViewActivity : BaseActivity<ActivityDetailBinding>() {
+    var url:String? = ""
     override fun getLayoutId(): Int = R.layout.activity_detail
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +29,16 @@ class DetailViewActivity : BaseActivity<ActivityDetailBinding>() {
             onFullStoryClicked(newsEntity?.articleUrl)
         }
         try {
-            val url = newsEntity?.mediaEntityList?.get(0)?.url
+             url = newsEntity?.mediaEntityList?.get(0)?.url
             /* val draweeController = Fresco.newDraweeControllerBuilder()
                      .setImageRequest(ImageRequest.fromUri(Uri.parse(url)))
                      .setOldController(binding!!.newsImage.controller).build()
              binding!!.newsImage.controller = draweeController*/
+            Picasso.with(this).load(url).placeholder(R.drawable.place_holder)
+                    .into(binding!!.newsImage)
 
            } catch (e: Exception) {
+            e.printStackTrace()
         }
         binding!!.executePendingBindings()
     }

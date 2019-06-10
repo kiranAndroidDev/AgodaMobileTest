@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -24,13 +25,9 @@
 
         <ImageView
             android:id="@+id/news_item_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="70dp"
-            android:maxWidth="70dp"
-            android:maxHeight="70dp"
-            android:minHeight="70dp"
-            android:src="@{news.imageUrl}"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/place_holder"
             android:contentDescription="TODO" />
 
         <TextView
