@@ -8,6 +8,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
@@ -16,6 +20,7 @@ import news.agoda.com.sample.model.NewsEntity
 import news.agoda.com.sample.R
 import news.agoda.com.sample.base.BaseActivity
 import news.agoda.com.sample.databinding.ActivityMainBinding
+import news.agoda.com.sample.util.isNetworkConnected
 import news.agoda.com.sample.viewmodel.ViewModelFactory
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemClick<NewsEntity> {
@@ -35,12 +40,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
         newsViewModel = ViewModelProviders.of(this, newsViewModelFactory).get(MainViewModel::class.java)
         initNewsDataAdapter()
         observeListChange()
+        observeError()
         fetchList()
     }
 
     private fun fetchList() {
         binding!!.showLoading = true
+        if(isNetworkConnected(this))
         newsViewModel!!.fetchNewsList()
+        else {
+            showToast("Internet Connection missing")
+            checkInternetConnectionAgain();
+        }
+    }
+
+    private fun checkInternetConnectionAgain() {
+        CoroutineScope(Dispatchers.Main).launch{
+            delay(3000)
+            fetchList()
+        }
+
     }
 
     private fun initNewsDataAdapter() {
@@ -55,6 +74,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
         newsViewModel!!.getItems().observe(this) {
                 binding!!.showLoading = false
                 newsListAdapter?.newsList = it
+
+        }
+    }
+
+    private fun observeError() {
+        newsViewModel!!.getError().observe(this) {
+            binding!!.showLoading = false
+            showToast("Something went wrong")
 
         }
     }

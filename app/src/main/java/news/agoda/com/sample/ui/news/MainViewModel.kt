@@ -1,7 +1,5 @@
 package news.agoda.com.sample.ui.news
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import news.agoda.com.sample.model.NewsEntity
-import news.agoda.com.sample.model.NewsList
 import news.agoda.com.sample.network.ApiClient
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 /**
@@ -18,9 +16,9 @@ Created by kiranb on 7/6/19
  */
 class MainViewModel @Inject constructor(var apiClient: ApiClient) : ViewModel() {
     private var items: MutableLiveData<List<NewsEntity>> = MutableLiveData()
+    private var errorMessage =MutableLiveData<String>()
 
     fun fetchNewsList() {
-        onLoading()
         viewModelScope.launch {
             callNewsListApi()
         }
@@ -28,11 +26,14 @@ class MainViewModel @Inject constructor(var apiClient: ApiClient) : ViewModel() 
     }
 
     fun getItems() = items
-
+    fun getError() = errorMessage
 
     private suspend fun callNewsListApi() = withContext(Dispatchers.Default) {
         val result = apiClient.newsList.await()
-        onSuccess(result.results)
+        if(result.isSuccessful)
+            onSuccess(result.body()?.results)
+        else
+            onError()
     }
 
 
@@ -40,12 +41,9 @@ class MainViewModel @Inject constructor(var apiClient: ApiClient) : ViewModel() 
         items.postValue(newsList)
     }
 
-    private fun onError(error: Throwable?) {
-
+    private fun onError() {
+            this.errorMessage.postValue("Something went wrong")
        }
 
-    private fun onLoading() {
-
-    }
 
 }

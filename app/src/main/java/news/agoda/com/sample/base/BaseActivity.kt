@@ -8,16 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import dagger.android.AndroidInjection
-import news.agoda.com.sample.util.ConnectivityReceiver
 
 /**
 Created by kiranb on 7/6/19
  */
-abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
-    override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        if(!isConnected)
-        Toast.makeText(this,"Internet Connection Missing",Toast.LENGTH_LONG).show()
-    }
+abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     protected var binding: B? = null
 
@@ -26,15 +21,20 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity(), Connecti
         AndroidInjection.inject(this)
         binding = DataBindingUtil.setContentView(this, getLayoutId())
         super.onCreate(savedInstanceState)
-        registerReceiver(ConnectivityReceiver(),
-                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     override fun onResume() {
         super.onResume()
-        ConnectivityReceiver.connectivityReceiverListener = this
     }
 
+    fun showToast(msg:String){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
 
     abstract fun getLayoutId(): Int

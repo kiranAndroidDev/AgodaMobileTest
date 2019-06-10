@@ -14,5 +14,5 @@ Created by kiranb on 7/6/19
 interface ApiClient {
 
     @get:GET(ApiConstants.NEWS_URL)
-    val newsList: Deferred<NewsList>
+    val newsList: Deferred<Response<NewsList>>
 }
