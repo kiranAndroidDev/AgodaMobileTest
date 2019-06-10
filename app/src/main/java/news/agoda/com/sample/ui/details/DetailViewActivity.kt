@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 
 import news.agoda.com.sample.R
@@ -24,21 +23,9 @@ class DetailViewActivity : BaseActivity<ActivityDetailBinding>() {
         super.onCreate(savedInstanceState)
         val extras = intent.extras
         val newsEntity = extras?.getParcelable("NewsItem") as NewsEntity?
-        binding!!.news = newsEntity
+        binding!!.newsEntity = newsEntity
         binding!!.clickListener = View.OnClickListener {
             onFullStoryClicked(newsEntity?.articleUrl)
-        }
-        try {
-             url = newsEntity?.mediaEntityList?.get(0)?.url
-            /* val draweeController = Fresco.newDraweeControllerBuilder()
-                     .setImageRequest(ImageRequest.fromUri(Uri.parse(url)))
-                     .setOldController(binding!!.newsImage.controller).build()
-             binding!!.newsImage.controller = draweeController*/
-            Picasso.with(this).load(url).placeholder(R.drawable.place_holder)
-                    .into(binding!!.newsImage)
-
-           } catch (e: Exception) {
-            e.printStackTrace()
         }
         binding!!.executePendingBindings()
     }

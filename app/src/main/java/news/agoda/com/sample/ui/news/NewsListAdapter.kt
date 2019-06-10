@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import news.agoda.com.sample.R
 import news.agoda.com.sample.databinding.ListItemBinding
@@ -36,21 +35,7 @@ class NewsListAdapter(var context: Context) : RecyclerView.Adapter<NewsListAdapt
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         newsList?.get(i)?.let {entity->
             viewHolder.itemView.tag = entity
-            viewHolder.binding.news = entity
-
-            try {
-                if (entity.mediaEntityList!!.isNotEmpty()) {
-                    val mediaEntity = entity.mediaEntityList[0]
-                    val thumbnailURL = mediaEntity.url
-                    Picasso.with(context).load(thumbnailURL).placeholder(R.drawable.place_holder)
-                            .into(viewHolder.binding.newsItemImage)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Picasso.with(context).load(R.drawable.place_holder).error(R.drawable.place_holder).placeholder(R.drawable.place_holder)
-                        .into(viewHolder.binding.newsItemImage)
-            }
-
+            viewHolder.binding.newsEntity = entity
 
             viewHolder.binding.setItemClickListener { listener!!.onItemClick(entity) }
         }

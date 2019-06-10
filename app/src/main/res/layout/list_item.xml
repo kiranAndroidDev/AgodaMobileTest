@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="news"
+            name="newsEntity"
             type="news.agoda.com.sample.model.NewsEntity" />
 
-
+            <variable
+                name="imgUrl"
+                type="String"/>
         <variable
             name="itemClickListener"
             type="android.view.View.OnClickListener" />
@@ -27,7 +28,7 @@
             android:id="@+id/news_item_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/place_holder"
+            imgSrc="@{newsEntity.imageUrl}"
             android:contentDescription="TODO" />
 
         <TextView
@@ -35,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="@{news.title}" />
+            android:text="@{newsEntity.title}" />
 
     </LinearLayout>
 
