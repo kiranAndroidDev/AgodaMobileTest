@@ -4,8 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import news.agoda.com.sample.R
 import news.agoda.com.sample.databinding.ListItemBinding
 import news.agoda.com.sample.model.NewsEntity
 
