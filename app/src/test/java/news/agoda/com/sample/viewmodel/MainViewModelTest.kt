@@ -49,6 +49,6 @@ class MainViewModelTest {
 
     @Test
     fun getNewsList(){
-        Mockito.`when`(apiClient!!.newsList).thenReturn(GlobalScope.async {NewsList() })
+        Mockito.`when`(apiClient!!.newsList).thenReturn(GlobalScope.async {NewsList("ok",null,null,null) })
     }
 }
