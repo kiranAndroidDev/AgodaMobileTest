@@ -79,6 +79,7 @@ class MainViewModelTest {
         Thread.sleep(1000)
         verify(observer).onChanged("Something went wrong")
         assertNotNull(mainViewModel.getError().value)
+        assertNull(mainViewModel.getItems().value)
     }
 
     @Test
