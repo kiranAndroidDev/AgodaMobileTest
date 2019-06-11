@@ -73,15 +73,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
     private fun observeListChange() {
         newsViewModel!!.getItems().observe(this) {
                 binding!!.showLoading = false
-                newsListAdapter?.newsList = it
+                newsListAdapter?.newsList = it.results
 
         }
     }
 
     private fun observeError() {
-        newsViewModel!!.getError().observe(this) {
+        newsViewModel!!.getError().observe(this) { if (it!=null) {
             binding!!.showLoading = false
             showToast("Something went wrong")
+        }
 
         }
     }

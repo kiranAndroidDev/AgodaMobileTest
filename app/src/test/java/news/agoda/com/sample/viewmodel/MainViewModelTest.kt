@@ -2,10 +2,6 @@ package news.agoda.com.sample.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import news.agoda.com.sample.model.NewsEntity
 import news.agoda.com.sample.model.NewsList
 import news.agoda.com.sample.network.ApiClient
 import news.agoda.com.sample.ui.news.MainViewModel
@@ -16,8 +12,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import retrofit2.Response
+import junit.framework.Assert.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 
 /**
 Created by kiranb on 10/6/19
@@ -25,30 +26,72 @@ Created by kiranb on 10/6/19
 @RunWith(JUnit4::class)
 class MainViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
     @Mock
-    var apiClient:ApiClient?=null
+    var apiClient: ApiClient? = null
 
     lateinit var mainViewModel: MainViewModel
 
-    @Mock
-    var observer: Observer<NewsList>? = null
 
-   /* @Rule
+    @Rule
     @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()*/
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    val newsList = NewsList("ok")
+    val threadContext = newSingleThreadContext("UI thread")
 
     @Before
-    fun setUp(){
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(threadContext)
         mainViewModel = MainViewModel(apiClient!!)
-        mainViewModel.getItems().observeForever { observer};
     }
 
     @Test
-    fun getNewsList(){
-        Mockito.`when`(apiClient!!.newsList).thenReturn(GlobalScope.async {NewsList("ok",null,null,null) })
+    fun getNewsListSucces() {
+        Mockito.`when`(apiClient!!.newsList).thenAnswer {
+            return@thenAnswer GlobalScope.async { newsList }
+        }
+
+        val observer = mock(Observer::class.java) as Observer<NewsList>
+        mainViewModel.getItems().observeForever(observer)
+
+        mainViewModel.fetchNewsList()
+        Thread.sleep(1000)
+        verify(observer).onChanged(newsList)
+        assertNotNull(mainViewModel.getItems().value)
+        assertEquals("ok", mainViewModel.getItems().value!!.status)
     }
+
+    @Test
+    fun getNewsListFailure() {
+        /*`when`(apiClient!!.newsList).thenAnswer {
+            GlobalScope.async { NewsList("error") }
+        }
+        assertNull(mainViewModel.getItems().value)
+        assertNotNull(mainViewModel.getError())*/
+        Mockito.`when`(apiClient!!.newsList).thenAnswer {
+            return@thenAnswer GlobalScope.async { null }
+        }
+        val observer = mock(Observer::class.java) as Observer<String>
+        mainViewModel.getError().observeForever(observer)
+
+        mainViewModel.fetchNewsList()
+        Thread.sleep(1000)
+        verify(observer).onChanged("Something went wrong")
+        assertNotNull(mainViewModel.getError().value)
+    }
+
+    @Test
+    fun callGetNewsApi(){
+        runBlocking {
+            apiClient!!.newsList
+        }
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
+        threadContext.close()
+    }
+
 }

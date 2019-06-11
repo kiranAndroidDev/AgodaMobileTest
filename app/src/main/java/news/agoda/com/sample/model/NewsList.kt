@@ -20,13 +20,4 @@ import com.google.gson.annotations.SerializedName
                  val results:List<NewsEntity>? = null){
 
 
-  /*  @SerializedName("section")
-    var section: String? = null
-
-    @SerializedName("num_results")
-    var totalResults: String? = null
-
-    @SerializedName("results")
-    var results: List<NewsEntity>? = null*/
-
 }
