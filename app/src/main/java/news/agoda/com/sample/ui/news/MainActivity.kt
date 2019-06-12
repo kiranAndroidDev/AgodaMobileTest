@@ -1,12 +1,15 @@
 package news.agoda.com.sample.ui.news
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 
 import android.os.Bundle
 
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

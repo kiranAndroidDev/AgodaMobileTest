@@ -4,40 +4,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="newsEntity"
             type="news.agoda.com.sample.model.NewsEntity" />
 
-            <variable
-                name="imgUrl"
-                type="String"/>
+
         <variable
             name="itemClickListener"
             type="android.view.View.OnClickListener" />
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:onClick="@{itemClickListener}"
-        android:orientation="horizontal">
+        android:onClick="@{itemClickListener}">
 
-        <ImageView
-            android:id="@+id/news_item_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            imgSrc="@{newsEntity.imageUrl}"
-            android:contentDescription="TODO" />
+            <ImageView
+                android:id="@+id/news_item_image"
+                imgSrc="@{newsEntity.imageUrl}"
+                android:layout_width="@dimen/image_size"
+                android:layout_gravity="center"
+                android:layout_height="@dimen/image_size"
+                android:contentDescription="TODO"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:scaleType="fitXY"
+                 />
 
         <TextView
             android:id="@+id/news_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="@{newsEntity.title}" />
+            android:padding="@dimen/padding_8"
+            android:text="@{newsEntity.title}"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toEndOf="@id/news_item_image"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_margin="@dimen/activity_horizontal_margin"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

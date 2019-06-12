@@ -64,11 +64,6 @@ class MainViewModelTest {
 
     @Test
     fun getNewsListFailure() {
-        /*`when`(apiClient!!.newsList).thenAnswer {
-            GlobalScope.async { NewsList("error") }
-        }
-        assertNull(mainViewModel.getItems().value)
-        assertNotNull(mainViewModel.getError())*/
         Mockito.`when`(apiClient!!.newsList).thenAnswer {
             return@thenAnswer GlobalScope.async { null }
         }
