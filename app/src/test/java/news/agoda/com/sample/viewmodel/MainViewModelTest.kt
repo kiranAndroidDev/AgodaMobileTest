@@ -36,8 +36,10 @@ class MainViewModelTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    val newsList = NewsList("ok")
+    val newsList = NewsList("OK")
     val threadContext = newSingleThreadContext("UI thread")
+    val observerNews = mock(Observer::class.java) as Observer<NewsList>
+    val observerError = mock(Observer::class.java) as Observer<String>
 
     @Before
     fun setUp() {
@@ -51,15 +53,13 @@ class MainViewModelTest {
         Mockito.`when`(apiClient!!.newsList).thenAnswer {
             return@thenAnswer GlobalScope.async { newsList }
         }
-
-        val observer = mock(Observer::class.java) as Observer<NewsList>
-        mainViewModel.getItems().observeForever(observer)
+        mainViewModel.getItems().observeForever(observerNews)
 
         mainViewModel.fetchNewsList()
         Thread.sleep(1000)
-        verify(observer).onChanged(newsList)
+        verify(observerNews).onChanged(newsList)
         assertNotNull(mainViewModel.getItems().value)
-        assertEquals("ok", mainViewModel.getItems().value!!.status)
+        assertEquals("OK", mainViewModel.getItems().value!!.status)
     }
 
     @Test
@@ -67,12 +67,11 @@ class MainViewModelTest {
         Mockito.`when`(apiClient!!.newsList).thenAnswer {
             return@thenAnswer GlobalScope.async { null }
         }
-        val observer = mock(Observer::class.java) as Observer<String>
-        mainViewModel.getError().observeForever(observer)
+        mainViewModel.getError().observeForever(observerError)
 
         mainViewModel.fetchNewsList()
         Thread.sleep(1000)
-        verify(observer).onChanged("Something went wrong")
+        verify(observerError).onChanged("Something went wrong")
         assertNotNull(mainViewModel.getError().value)
         assertNull(mainViewModel.getItems().value)
     }

@@ -1,20 +1,14 @@
 package news.agoda.com.sample.ui.news
 
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 
 import android.os.Bundle
 
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
@@ -25,9 +19,11 @@ import news.agoda.com.sample.base.BaseActivity
 import news.agoda.com.sample.databinding.ActivityMainBinding
 import news.agoda.com.sample.util.isNetworkConnected
 import news.agoda.com.sample.viewmodel.ViewModelFactory
+import android.os.Handler
+import news.agoda.com.sample.util.constants.NEWS_ITEM
 
-class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemClick<NewsEntity> {
 
+class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemClick<NewsEntity>, SwipeRefreshLayout.OnRefreshListener {
     private var newsListAdapter: NewsListAdapter? = null
     private var newsViewModel: MainViewModel? = null
 
@@ -45,24 +41,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
         observeListChange()
         observeError()
         fetchList()
+
+        swipe_to_refresh.setOnRefreshListener(this)
     }
 
     private fun fetchList() {
         binding!!.showLoading = true
-        if(isNetworkConnected(this))
-        newsViewModel!!.fetchNewsList()
-        else {
+        if (isNetworkConnected(this)) {
+            newsViewModel!!.fetchNewsList()
+        } else {
             showToast("Internet Connection missing")
-            checkInternetConnectionAgain();
-        }
-    }
-
-    private fun checkInternetConnectionAgain() {
-        CoroutineScope(Dispatchers.Main).launch{
-            delay(3000)
-            fetchList()
+            binding!!.showLoading = false
         }
 
+        if (swipe_to_refresh.isRefreshing)
+            swipe_to_refresh.isRefreshing = false
     }
 
     private fun initNewsDataAdapter() {
@@ -75,26 +68,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
 
     private fun observeListChange() {
         newsViewModel!!.getItems().observe(this) {
-                binding!!.showLoading = false
-                newsListAdapter?.newsList = it.results
+            binding!!.showLoading = false
+            newsListAdapter?.newsList = it.results
 
         }
     }
 
     private fun observeError() {
-        newsViewModel!!.getError().observe(this) { if (it!=null) {
-            binding!!.showLoading = false
-            showToast("Something went wrong")
-        }
+        newsViewModel!!.getError().observe(this) {
+            if (it != null) {
+                binding!!.showLoading = false
+                showToast("Something went wrong")
+            }
 
         }
     }
 
-   override fun onItemClick(newsEntity: NewsEntity) {
-       val i = Intent(this, DetailViewActivity::class.java)
-       i.putExtra("NewsItem",newsEntity)
-       startActivity(i)
-   }
+    override fun onItemClick(newsEntity: NewsEntity) {
+        val i = Intent(this, DetailViewActivity::class.java)
+        i.putExtra(NEWS_ITEM, newsEntity)
+        startActivity(i)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -105,6 +99,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
+    }
+
+    override fun onRefresh() {
+        binding!!.showLoading = false
+        Handler().postDelayed(Runnable {
+            fetchList()
+        }, 1000)
     }
 
 }

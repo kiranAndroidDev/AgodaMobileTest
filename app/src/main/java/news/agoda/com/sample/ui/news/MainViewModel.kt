@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import news.agoda.com.sample.model.NewsEntity
 import news.agoda.com.sample.model.NewsList
 import news.agoda.com.sample.network.ApiClient
+import news.agoda.com.sample.util.constants.STATUS_OK
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class MainViewModel @Inject constructor(var apiClient: ApiClient) : ViewModel() 
 
     private suspend fun callNewsListApi() = withContext(Job() +Dispatchers.IO) {
         val result = apiClient.newsList.await()
-        if(result!=null && result.status == "OK")
+        if(result!=null && result.status == STATUS_OK)
             onSuccess(result)
         else
             onError()

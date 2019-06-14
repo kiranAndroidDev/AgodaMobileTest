@@ -19,7 +19,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/size_10"
+        android:background="@android:color/transparent"
         android:onClick="@{itemClickListener}">
 
             <ImageView
@@ -44,10 +45,6 @@
             app:layout_constraintStart_toEndOf="@id/news_item_image"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1"
-            android:layout_margin="@dimen/activity_horizontal_margin"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

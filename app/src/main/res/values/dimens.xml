@@ -8,4 +8,5 @@
     <dimen name="size_7">7dp</dimen>
     <dimen name="textsize_18">18sp</dimen>
     <dimen name="size_0">0dp</dimen>
+    <dimen name="size_10">10dp</dimen>
 </resources>

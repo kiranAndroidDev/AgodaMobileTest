@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<data>
-    <variable
-        name="clickListener"
-        type="android.view.View.OnClickListener" />
 
-    <variable
-        name="newsEntity"
-        type="news.agoda.com.sample.model.NewsEntity" />
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="newsEntity"
+            type="news.agoda.com.sample.model.NewsEntity" />
 
 
-</data>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,54 +23,53 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_0"
-            app:layout_constraintHeight_percent="0.15"
             android:layout_marginLeft="@dimen/size_7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:padding="@dimen/padding_8"
+            android:text="@{newsEntity.title}"
             android:textColor="@android:color/black"
             android:textSize="@dimen/textsize_18"
-            android:text="@{newsEntity.title}"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/news_image"
+            imgSrc="@{newsEntity.imageUrl}"
             android:layout_width="@dimen/size_0"
             android:layout_height="@dimen/size_0"
+            android:layout_gravity="center"
+            android:contentDescription="TODO"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.35"
-            app:layout_constraintWidth_percent="0.70"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_gravity="center"
-            imgSrc="@{newsEntity.imageUrl}"
-            android:contentDescription="TODO"
-             />
+            app:layout_constraintWidth_percent="0.70" />
 
         <TextView
             android:id="@+id/summary_content"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_0"
+            android:gravity="center"
+            android:padding="@dimen/padding_8"
+            android:text="@{newsEntity.summary}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/news_image"
-            android:text="@{newsEntity.summary}"
-            android:padding="@dimen/padding_8" />
+            app:layout_constraintTop_toBottomOf="@id/news_image" />
 
 
         <Button
             android:id="@+id/full_story_link"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_0"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/summary_content"
             android:layout_margin="@dimen/size_7"
             android:onClick="@{clickListener}"
-            android:text="Full Story" />
+            android:text="Full Story"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summary_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

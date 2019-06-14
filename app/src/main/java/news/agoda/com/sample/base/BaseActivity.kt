@@ -1,7 +1,5 @@
 package news.agoda.com.sample.base
 
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,19 +21,9 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
-
-    fun showToast(msg:String){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 
     abstract fun getLayoutId(): Int
 
