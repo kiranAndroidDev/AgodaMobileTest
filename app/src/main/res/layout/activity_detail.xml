@@ -29,6 +29,7 @@
             android:textColor="@android:color/black"
             android:textSize="@dimen/textsize_18"
             android:textStyle="bold"
+            android:textAlignment="textStart"
             app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

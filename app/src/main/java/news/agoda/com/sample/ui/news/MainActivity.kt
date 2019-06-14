@@ -50,7 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
         if (isNetworkConnected(this)) {
             newsViewModel!!.fetchNewsList()
         } else {
-            showToast("Internet Connection missing")
+            showToast(getString(R.string.internet_missing_message))
             binding!!.showLoading = false
         }
 
@@ -78,7 +78,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NewsListAdapter.ItemCl
         newsViewModel!!.getError().observe(this) {
             if (it != null) {
                 binding!!.showLoading = false
-                showToast("Something went wrong")
+                showToast(getString(R.string.default_error_msg))
             }
 
         }
